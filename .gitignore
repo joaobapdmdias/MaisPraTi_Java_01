@@ -1,0 +1,6 @@
+bin/
+lib/
+.vscode/
+*.class
+Rando.java
+tags
