@@ -13,6 +13,8 @@ public class App {
         b = scanner.nextFloat();
         System.out.println("Digite um valor: ");
         c = scanner.nextFloat(); 
+        
+        scanner.close();
 
         if (a < b) {
             min = a;
