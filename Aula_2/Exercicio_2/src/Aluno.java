@@ -14,29 +14,36 @@ public class Aluno {
         this.nota3 = nota3;
     }
 
-    public void notas() {
-        
+    public double[] minimax(double a, double b, double c) {
         double min, max;
 
-        if (this.nota1 < this.nota2) {
-            min = this.nota1;
-            max = this.nota2;
+        if (a < b) {
+            min = a;
+            max = b;
         }
         else {
-            min = this.nota2;
-            max = this.nota1;
+            min = b;
+            max = a;
+        }
+        if (c < min) {
+            min = c;
+        } 
+        else if (c > max) {
+            max = c;
         }
 
-        if (this.nota3 < min) {
-            min = this.nota3;
-        } 
-        else if (this.nota3 > max) {
-            max = this.nota3;
-        }
+        double[] min_max = {min, max};
+
+        return  min_max;
+    }
+
+    public void notas() {
+
+        double[] min_max = this.minimax(this.nota1, this.nota2, this.nota3);
 
         System.out.println("O nome do aluno é: " + this.nome);
-        System.out.println("A sua maior nota foi: " + max);
-        System.out.println("A sua menor nota foi: " + min);
+        System.out.println("A sua maior nota foi: " + min_max[1]);
+        System.out.println("A sua menor nota foi: " + min_max[0]);
         System.out.println("A sua média foi: " + (this.nota1 + this.nota2 + this.nota3) / 3);
     }
 }
