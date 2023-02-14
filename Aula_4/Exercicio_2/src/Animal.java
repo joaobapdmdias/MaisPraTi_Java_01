@@ -1,7 +1,7 @@
 public abstract class Animal {
     protected String nome;
-    public abstract String som();
-    public abstract String move();
+    protected abstract String som();
+    protected abstract String move();
 
     public String getNome() {
         return nome;
