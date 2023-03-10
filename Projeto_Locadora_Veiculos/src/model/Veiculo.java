@@ -19,7 +19,6 @@ public class Veiculo {
     private double valorDiario;
  
     public Veiculo(String placa, String cor, String marca, String modelo, int ano, Segmento segmento, Combustivel combustivel, double valorDiario) {
-        this.id = Contador.proximoId();
         this.status = Status.LIVRE;
         this.placa = placa;
         this.cor = cor;
@@ -88,11 +87,15 @@ public class Veiculo {
     public void setDataEntrega(LocalDate dataEntrega) {
         this.dataEntrega = dataEntrega;
     }
+    public Segmento getSegmento() {
+        return segmento;
+    }
+    public Combustivel getCombustivel() {
+        return combustivel;
+    }
     
     @Override
     public String toString() {
-        // return "Veiculo [id=" + id + ", placa=" + placa + ", cor=" + cor + ", marca=" + marca + ", modelo=" + modelo
-        //         + ", segmento=" + segmento + ", combustivel=" + combustivel + ", valorDiario=" + valorDiario + "]";
         return id + "-" + marca + "-" + modelo + "-" + placa + "-" + cor
                   + "- " + combustivel + "- diária R$" 
                   + valorDiario 

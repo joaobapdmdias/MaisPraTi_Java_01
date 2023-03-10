@@ -17,13 +17,19 @@ public class ClienteRepository {
 
     public ClienteRepository() {
         repository = new HashMap<>();
-        Cliente cliente = new Cliente("João", "Rua 4", "12345", "12345");
-        repository.put(cliente.getId(), cliente);
     }
 
     public void salvar(Cliente cliente) {
+        Cliente clienteDB = buscarPorCpf(cliente.getCpf());
         connection = BancoDeDados.obterConexao();
-        String query = "INSERT INTO cliente (nome, enderenco, cpf, senha) values (?, ?, ?, ?)";
+        String query;
+
+        if (clienteDB == null) {
+            query = "INSERT INTO cliente (nome, enderenco, cpf, senha) values (?, ?, ?, ?)";
+        } else {
+            query = "UPDATE cliente SET nome = ?, enderenco = ?, cpf = ?, senha = ?, valor_debito = ?"
+                  + "WHERE id = " + cliente.getId();
+        }
 
         PreparedStatement ps;
         try {
@@ -32,6 +38,9 @@ public class ClienteRepository {
             ps.setString(2, cliente.getEndereco());
             ps.setString(3, cliente.getCpf());
             ps.setString(4, cliente.getSenha());
+            if (clienteDB != null) {
+                ps.setDouble(5, cliente.getValorDebito());
+            }
 
             int sucesso = ps.executeUpdate();
             if (sucesso == 1) {
@@ -66,8 +75,9 @@ public class ClienteRepository {
                 String nome = rs.getString("nome");
                 String senha = rs.getString("senha");
                 String endereco = rs.getString("enderenco");
+                Double valorDebito = rs.getDouble("valor_debito");
 
-                return new Cliente(id, nome, endereco, cpf, senha);
+                return new Cliente(id, nome, endereco, cpf, senha, valorDebito);
             }
         } catch (SQLException e) {
             e.printStackTrace();

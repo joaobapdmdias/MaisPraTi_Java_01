@@ -57,7 +57,6 @@ public class VeiculoService {
     }
 
     public void mostrarTodosVeiculosLivres() {
-        // this.repository.buscarTodos("WHERE status = 'livre' ").stream().filter(veiculo -> veiculo.getStatus() == Status.LIVRE).forEach(System.out::println);
         this.repository.buscarTodos("WHERE status = 'livre' ").forEach(System.out::println);
 
     }
@@ -84,6 +83,7 @@ public class VeiculoService {
 
     public void statusLivre(Veiculo veiculo) {
         veiculo.setStatus(Status.LIVRE);
+        veiculo.setDataEntrega(null);
         repository.salvar(veiculo);
     }
 

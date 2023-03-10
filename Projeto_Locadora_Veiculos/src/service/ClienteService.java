@@ -6,16 +6,23 @@ import java.util.Scanner;
 
 import model.Cliente;
 import model.Veiculo;
+import model.Venda;
 import repository.ClienteRepository;
+import repository.VeiculoRepository;
+import repository.VendaRepository;
 
 public class ClienteService {
 
     ClienteRepository repository;
+    VeiculoRepository veiculoRepository;
+    VendaRepository vendaRepository;
     Scanner sc;
 
     public ClienteService(Scanner sc) {
         this.sc = sc;
         this.repository = new ClienteRepository();
+        this.veiculoRepository = new VeiculoRepository();
+        this.vendaRepository = new VendaRepository();
     }
 
     public Cliente procurarCliente(String cpf) {
@@ -52,17 +59,18 @@ public class ClienteService {
     public void alugarVeiculo(Cliente cliente, Veiculo veiculo, int diasAlugado) {
         cliente.getVeiculosAlugados().add(veiculo);
         cliente.setValorDebito(cliente.getValorDebito() + veiculo.getValorDiario() * diasAlugado);
+        repository.salvar(cliente);
 
         System.out.println("Veículo alugado com sucesso. Dia da entrega: " 
                             + LocalDate.now().plusDays(diasAlugado).
                             format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
     }
 
-    public void devolverVeiculo(Cliente cliente, Veiculo veiculo) {
-        cliente.getVeiculosAlugados().remove(veiculo);
-
-        repository.salvar(cliente);
-    }
+        public void devolverVeiculo(Cliente cliente, Veiculo veiculo) {
+            Venda venda = vendaRepository.buscarPeloClienteEVeiculo(cliente.getId(), veiculo.getId());
+            venda.setEntregue(true);
+            vendaRepository.salvar(venda);
+        }
 
     public void mostrarVeiculosEDebitos(Cliente cliente) {
         mostrarVeiculosAlugados(cliente);
@@ -70,8 +78,10 @@ public class ClienteService {
     }
 
     public void mostrarVeiculosAlugados(Cliente cliente) {
-        cliente = repository.buscarPorId(cliente.getId());
-        cliente.getVeiculosAlugados().forEach(System.out::println);
+        // cliente = repository.buscarPorId(cliente.getId());
+        // cliente.getVeiculosAlugados().forEach(System.out::println);
+        veiculoRepository.buscarVeiculosPeloClienteId(cliente.getId()).forEach(System.out::println);
+        veiculoRepository.buscarVeiculosPeloClienteId(cliente.getId());
     }
     
 }
