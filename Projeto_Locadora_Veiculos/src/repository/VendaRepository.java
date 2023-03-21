@@ -5,19 +5,30 @@ import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import model.Cliente;
+import model.Veiculo;
 import model.Venda;
+import model.Vendedor;
 
 public class VendaRepository {
     Map<Integer, Venda> repository;
     private Connection connection;
+    ClienteRepository clienteRepository;
+    VeiculoRepository veiculoRepository;
+    VendedorRepository vendedorRepository;
 
     public VendaRepository() {
-        this.repository = new HashMap<>();
+        // this.repository = new HashMap<>();
+        clienteRepository = new ClienteRepository();
+        veiculoRepository = new VeiculoRepository();
+        vendedorRepository = new VendedorRepository();
     }
 
     public void salvar(Venda venda) {
@@ -96,6 +107,36 @@ public class VendaRepository {
             BancoDeDados.fecharConexao();
         }
 
+        return null;
+    }
+
+    public List<Venda> buscarVendasPorVendedor(int vendedorId) {
+        List<Venda> listaDeVendas = new ArrayList<>();
+        String query = "SELECT * FROM venda WHERE id_vendedor = " + vendedorId;
+        Connection connection = BancoDeDados.obterConexao();
+        try {
+            PreparedStatement ps = connection.prepareStatement(query);
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                int id = rs.getInt("id");
+                int clienteId = rs.getInt("id_cliente");
+                int veiculoId = rs.getInt("id_veiculo");
+                LocalDate data = rs.getDate("data").toLocalDate();
+
+                Cliente cliente = clienteRepository.buscarPorId(clienteId, false);
+                Veiculo veiculo = veiculoRepository.buscarPorId(veiculoId, false);
+                Vendedor vendedor = vendedorRepository.buscarPorId(vendedorId, false);
+
+                listaDeVendas.add(new Venda(id, cliente, veiculo, vendedor, data));
+            }
+            return listaDeVendas;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        finally {
+            BancoDeDados.fecharConexao();
+        }
         return null;
     }
 }

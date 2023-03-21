@@ -61,8 +61,30 @@ public class ClienteRepository {
     public List<Cliente> buscarTodos() {
         return repository.values().stream().collect(Collectors.toList());
     }
-    public Cliente buscarPorId (Integer id) {
-        return repository.get(id);
+    public Cliente buscarPorId (Integer id, boolean fecharConexao) {
+        connection = BancoDeDados.obterConexao();
+        String query = "SELECT * FROM cliente WHERE id = " + id;
+        try {
+            PreparedStatement ps = connection.prepareStatement(query);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                String cpf = rs.getString("cpf");
+                String nome = rs.getString("nome");
+                String senha = rs.getString("senha");
+                String endereco = rs.getString("enderenco");
+                Double valorDebito = rs.getDouble("valor_debito");
+
+                return new Cliente(id, nome, endereco, cpf, senha, valorDebito);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            if (fecharConexao) {
+                BancoDeDados.fecharConexao();
+            }
+        }
+
+        return null;
     }
     public Cliente buscarPorCpf (String cpf) {
         connection = BancoDeDados.obterConexao();

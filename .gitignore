@@ -2,5 +2,6 @@ bin/
 lib/
 .vscode/
 *.class
+*.credentials
 Rando.java
 tags

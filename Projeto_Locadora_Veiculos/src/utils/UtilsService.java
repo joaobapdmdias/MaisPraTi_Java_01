@@ -7,7 +7,9 @@ import model.Pessoa;
 
 public class UtilsService {
     public static boolean confereSenha(Pessoa pessoa, String senha) {
-        return pessoa.getSenha().equals(senha);
+        // System.out.println("Senha da pessoa: " + pessoa.getSenha());
+        // System.out.println("Senha fornecida: " + senha);
+        return pessoa.getSenha().trim().equals(senha.trim());
     }
 
     public static String normalizaData(LocalDate data) {

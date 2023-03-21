@@ -66,7 +66,7 @@ public class VeiculoService {
     }
 
     public Veiculo buscaVeiculoPorId(Integer id) {
-        Veiculo veiculo = repository.buscarPorId(id);
+        Veiculo veiculo = repository.buscarPorId(id, true);
 
         if (veiculo == null) {
             throw new SistemaException("Veículo não localizado!");

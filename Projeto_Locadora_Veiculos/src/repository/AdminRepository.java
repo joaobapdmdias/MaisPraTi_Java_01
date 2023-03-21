@@ -1,5 +1,9 @@
 package repository;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -9,6 +13,7 @@ import model.Admin;
 
 public class AdminRepository {
     Map<Integer, Admin> repository;
+    private Connection connection = BancoDeDados.obterConexao();
 
     public AdminRepository() {
         this.repository = new HashMap<>();
@@ -28,5 +33,27 @@ public class AdminRepository {
     }
     public Admin buscarPorId (Integer id) {
         return repository.get(id);
+    }
+    public Admin buscarPorCpf (String cpf) {
+        connection = BancoDeDados.obterConexao();
+        String query = "SELECT * FROM admin WHERE cpf = " + cpf;
+        try {
+            PreparedStatement ps = connection.prepareStatement(query);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                int id = rs.getInt("id");
+                String nome = rs.getString("nome");
+                String senha = rs.getString("senha");
+                String endereco = rs.getString("endereco");
+
+                return new Admin(id, nome, endereco, cpf, senha);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            BancoDeDados.fecharConexao();
+        }
+
+        return null;
     }
 }

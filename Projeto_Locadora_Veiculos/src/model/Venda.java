@@ -24,6 +24,11 @@ public class Venda {
         this.cliente = cliente;
         this.data = LocalDate.now();
     }
+    public Venda(int id, Cliente cliente, Veiculo veiculo, Vendedor vendedor, LocalDate data) {
+        this(vendedor, veiculo, cliente);
+        this.id = id;
+        this.data = data;
+    }
     public Integer getId() {
         return id;
     }
@@ -61,8 +66,8 @@ public class Venda {
         this.entregue = entregue;
     }
     public String toString() {
-        return "Vendedor: " + vendedor.getNome() + "-" + "-Cliente" + cliente.getNome() 
-            + "-Veiculo " + veiculo.getModelo() + ", " + veiculo.getMarca() + veiculo.getPlaca()
-            + "-Data " + UtilsService.normalizaData(data);
+        return "Vendedor: " + vendedor.getNome() + ", " + "Cliente " + cliente.getNome() 
+            + ", Veiculo " + veiculo.getModelo() + ", " + veiculo.getMarca() + " " + veiculo.getPlaca()
+            + ", Data " + UtilsService.normalizaData(data);
     }
 }

@@ -16,10 +16,10 @@ import utils.UtilsService;
 
 public class Main {
     public static void main(String[] args) throws InterruptedException {
-        BancoDeDados.obterConexao();
-        System.out.println(BancoDeDados.statusConexao());
-        BancoDeDados.fecharConexao();
-        System.out.println(BancoDeDados.statusConexao());
+        // BancoDeDados.obterConexao();
+        // System.out.println(BancoDeDados.statusConexao());
+        // BancoDeDados.fecharConexao();
+        // System.out.println(BancoDeDados.statusConexao());
 
         Scanner sc = new Scanner(System.in);
         int opcao = 5;
@@ -88,8 +88,7 @@ public class Main {
                     }
                     break;
                 case 2:
-                int opcaoVendedor = sc.nextInt();
-                System.out.println("Digite seu cpf: ");
+                    System.out.println("Digite seu cpf: ");
                     cpf = sc.next();
                     Vendedor vendedor = vendedorService.procurarVendedor(cpf);
                     
@@ -102,6 +101,7 @@ public class Main {
                     } while (!senhaCorreta);
                     Menu.menuVendedor();
 
+                    int opcaoVendedor = sc.nextInt();
                     switch (opcaoVendedor) {
                         case 1:
                             vendedorService.mostrarDetalhesVendedor(vendedor);
